@@ -36,7 +36,7 @@
         </div>
     </main>
     <footer>
-        <p>&copy; <?php echo date("2024"); ?> Associated Security</p>
+        <p>&copy; 2024 Associated Security</p>
     </footer>
 </body>
 </html>
