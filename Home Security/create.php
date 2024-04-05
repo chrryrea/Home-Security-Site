@@ -1,3 +1,9 @@
+<?php
+session_start();
+
+// Check if the user is logged in
+$loggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,8 +21,13 @@
             <ul>
                 <li><a href="index.php">Home</a></li>
                 <li><a href="products.php">Products</a></li> 
-                <li><a href="shipping.php">Shipping</a></li>
-                <li><a href="create.php">Create</a></li>
+                <?php if ($loggedIn): ?>
+                    <li><a href="shipping.php">Shipping</a></li>
+                    <li><a href="create.php">Create</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+                <?php else: ?>
+                    <li><a href="login.php">Login</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
     </header>

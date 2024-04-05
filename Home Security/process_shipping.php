@@ -1,10 +1,13 @@
 
 <?php
+session_start();
 
+// Check if the user is logged in
+$loggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // Retrieve and handle form data
+    // Retrieve form data
     $first_name = test_input($_POST["first_name"]);
     $last_name = test_input($_POST["last_name"]);
     $street_address = test_input($_POST["street_address"]);
