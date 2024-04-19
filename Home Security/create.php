@@ -11,6 +11,34 @@ $loggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Associated Security - Create</title>
     <link rel="stylesheet" href="styles.css">
+    <script>
+    function validateForm() {
+        var code = document.forms["createProductForm"]["code"].value;
+        var name = document.forms["createProductForm"]["name"].value;
+        var description = document.forms["createProductForm"]["description"].value;
+        var price = document.forms["createProductForm"]["price"].value;
+
+        if (code == "" || code.length < 4 || code.length > 10) {
+            alert("Code must be between 4 and 10 characters long.");
+            return false;
+        }
+
+        if (name == "" || name.length < 10 || name.length > 100) {
+            alert("Name must be between 10 and 100 characters long.");
+            return false;
+        }
+
+        if (description == "" || description.length < 10 || description.length > 255) {
+            alert("Description must be between 10 and 255 characters long.");
+            return false;
+        }
+
+        if (price == "" || price <= 0 || price > 100000) {
+            alert("Price must be greater than 0 and not exceed $100,000.");
+            return false;
+        }
+    }
+    </script>
 </head>
 <body>
     <header>
@@ -34,7 +62,6 @@ $loggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
     <main>
         <h2>Create a New Product</h2>
         <?php
-// Database connection
 $dsn = 'mysql:host=sql1.njit.edu;port=3306;dbname=ie48';
 $username = 'ie48';
 $password = 'cZ_263161_Cz';
@@ -51,7 +78,6 @@ try {
 
     // Form submission handling
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Form validation and error handling
         $errors = [];
 
         // Check for duplicate product code
@@ -73,7 +99,6 @@ try {
             $stmt = $db->prepare($sql);
             $stmt->execute([$_POST['category'], $_POST['code'], $_POST['name'], $_POST['description'], $_POST['price']]);
         } else {
-            // Display errors
             foreach ($errors as $error) {
                 echo "<p>$error</p>";
             }
@@ -83,31 +108,30 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 ?>
+<form method="POST" id="createProductForm" onsubmit="return validateForm()">
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?= $category['CategoryID'] ?>"><?= $category['CategoryName'] ?></option>
+                <?php endforeach; ?>
+            </select>
 
-<form method="POST">
-    <label for="category">Category:</label>
-    <select id="category" name="category">
-        <?php foreach ($categories as $category): ?>
-            <option value="<?= $category['CategoryID'] ?>"><?= $category['CategoryName'] ?></option>
-        <?php endforeach; ?>
-    </select>
+            <label for="code">Code:</label>
+            <input type="text" id="code" name="code">
 
-    <label for="code">Code:</label>
-    <input type="text" id="code" name="code">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
 
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
 
-    <label for="description">Description:</label>
-    <textarea id="description" name="description"></textarea>
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" min="0" max="100000" step="0.01">
 
-    <label for="price">Price:</label>
-    <input type="number" id="price" name="price" min="0" max="9999.99" step="0.01">
-
-    <input type="reset" value="Reset">
-    <input type="submit" value="Submit">
-</form>
-</main>
+            <input type="reset" value="Reset">
+            <input type="submit" value="Submit">
+        </form>
+    </main>
     <footer>
         <p>&copy; 2024 Associated Security</p>
     </footer>

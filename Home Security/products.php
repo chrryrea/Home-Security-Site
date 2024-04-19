@@ -14,10 +14,12 @@ $loggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 </head>
 <body>
 <header>
-        <div class="banner">
-            <h1>Associated Security</h1>
-        </div>
-        <nav>
+    <div class="banner">
+        <h1>Associated Security</h1>
+        <?php if ($loggedIn): ?>
+            <p>Welcome, <?= $_SESSION['firstName'] ?> <?= $_SESSION['lastName'] ?> (<?= $_SESSION['email'] ?>)</p>
+        <?php endif; ?>
+    </div>
             <ul>
                 <li><a href="index.php">Home</a></li>
                 <li><a href="products.php">Products</a></li> 
@@ -53,10 +55,11 @@ $loggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
                 while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo "<div class='product'>";
                     echo "<h3>" . $row["CategoryName"] . "</h3>";
+                    echo "<p><strong>Product Code:</strong> <a href='product_details.php?product_id=" . $row["ItemCode"] . "'>" . $row["ItemCode"] . "</a></p>";
                     echo "<p><strong>Product Name:</strong> " . $row["ItemName"] . "</p>";
                     echo "<p><strong>Description:</strong> " . $row["Description"] . "</p>";
                     echo "<p><strong>Price:</strong> $" . $row["Price"] . "</p>";
-                    echo "<form action='delete.php' method='post'>";
+                    echo "<form action='delete.php' method='post' onsubmit='return confirm(\"Are you sure?\");'>";
                     echo "<input type='hidden' name='item_code' value='" . $row["ItemCode"] . "'>";
                     echo "<input type='submit' value='Delete'>";
                     echo "</form>";

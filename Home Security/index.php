@@ -13,9 +13,12 @@ $loggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 </head>
 <body>
 <header>
-        <div class="banner">
-            <h1>Associated Security</h1>
-        </div>
+    <div class="banner">
+        <h1>Associated Security</h1>
+        <?php if ($loggedIn): ?>
+            <p>Welcome, <?= $_SESSION['firstName'] ?> <?= $_SESSION['lastName'] ?> (<?= $_SESSION['email'] ?>)</p>
+        <?php endif; ?>
+    </div>
         <nav>
             <ul>
                 <li><a href="index.php">Home</a></li>
